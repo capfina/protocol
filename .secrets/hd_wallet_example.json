@@ -1,0 +1,6 @@
+{
+	"url": "<PROVIDER_URL_GOES_HERE>",
+	"accounts": {
+		"mnemonic": "<MNEMONIC_GOES_HERE>"
+	}
+}

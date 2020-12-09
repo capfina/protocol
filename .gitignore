@@ -1,0 +1,16 @@
+node_modules
+.DS_Store
+logs
+*.log
+build
+
+#Hardhat files
+cache
+artifacts
+
+# Secrets
+.secrets/
+
+# openzeppelin
+.openzeppelin/unknown*
+.openzeppelin/localhost*

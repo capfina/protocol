@@ -1,0 +1,4 @@
+{
+	"url": "<PROVIDER_URL_GOES_HERE>",
+	"accounts": ["<PRIVATE_KEY_1_GOES_HERE>"]
+}
