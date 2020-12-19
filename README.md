@@ -86,8 +86,6 @@ Finally deploy the system locally by running:
 npx hardhat deploy
 ```
 
-to compile the contracts and deploy the system.
-
 #### Upgrades
 
 After making upgrade-safe changes, you can update the local deployment without redeploying everything:
@@ -126,7 +124,7 @@ Set `isBuy` in the same direction as the target position to add margin or in the
 
 ### Creating a proposal
 
-Proposals are executable code containing up to 10 transactions. Each of those consists of a method call specifying the address of the contract being called, the method signature and the encoded params.
+Proposals are executable code containing up to 10 transactions. Each of those consists of a method call with the address of the contract being called, the method signature and the encoded params.
 
 On submission, proposals define a discoverability period meant to allow enough time for CAP holders to discover the proposal, to learn about it and to discuss it before the voting period starts. Voting lasts for 40320 blocks (around 1 week) during which any CAP holder can stake their tokens and cast their vote. Staked CAP will be locked until the voting period is over.
 
