@@ -33,30 +33,29 @@ task('gov:listProposals', 'lists all proposals')
 task('gov:stakeAmount', 'stake a CAP amount')
   .addParam("governance", "governance contract address")
   .addOptionalParam("gas", "gas limit")
-  .addOptionalParam("gasPrice", "gas price")
-  .addOptionalParam("dryRun", "creates the proposal but doesn't submit it")
+  .addOptionalParam("gasprice", "gas price")
   .setAction(stakeAmount);
 
 task('gov:releaseStaked', 'release staked CAP amount')
   .addParam("governance", "governance contract address")
   .addOptionalParam("gas", "gas limit")
-  .addOptionalParam("gasPrice", "gas price")
+  .addOptionalParam("gasprice", "gas price")
   .setAction(releaseStaked);
 
 task('gov:submitProposal', 'submit a proposal')
   .addParam("governance", "governance contract address")
   .addOptionalParam("gas", "gas limit")
-  .addOptionalParam("gasPrice", "gas price")
+  .addOptionalParam("gasprice", "gas price")
   .setAction(submitProposal);
 
 task('gov:castVote', 'cast vote using staked CAP')
   .addParam("governance", "governance contract address")
   .addOptionalParam("gas", "gas limit")
-  .addOptionalParam("gasPrice", "gas price")
+  .addOptionalParam("gasprice", "gas price")
   .setAction(castVote);
 
 task('gov:executeProposal', 'execute a proposal')
   .addParam("governance", "governance contract address")
   .addOptionalParam("gas", "gas limit")
-  .addOptionalParam("gasPrice", "gas price")
+  .addOptionalParam("gasprice", "gas price")
   .setAction(executeProposal);
