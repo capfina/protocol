@@ -142,7 +142,6 @@ contract Governance {
         } else if (block.number < proposal.startBlock) {
             return ProposalState.Pending;
         } else if (block.number <= proposal.endBlock) {
-            // TODO review rejected expedited
             if (proposal.expedited && proposal.forVotes > proposal.againstVotes && proposal.forVotes > forVotesExpeditedThreshold()) {
                 return ProposalState.Executable;
             }
