@@ -36,21 +36,21 @@ The Cap protocol is currently deployed on the following networks.
 
 | Contract      | Address       |
 | ------------- |---------------|
-| Governance      | 0x3BFbbf82657577668144921b96aAb72BC170646C |
-| Treasury      | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
-| Products | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
-| Trading | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
-| Queue | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
+| Governance      | N/A |
+| Treasury      | N/A      |
+| Products | N/A      |
+| Trading | N/A      |
+| Queue | N/A      |
 
 ### Mainnet
 
 | Contract      | Address       |
 | ------------- |---------------|
-| Governance      | 0x3BFbbf82657577668144921b96aAb72BC170646C |
-| Treasury      | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
-| Products | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
-| Trading | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
-| Queue | 0x3BFbbf82657577668144921b96aAb72BC170646C      |
+| Governance      | N/A |
+| Treasury      | N/A      |
+| Products | N/A      |
+| Trading | N/A      |
+| Queue | N/A      |
 
 ## Protocol Math
 
