@@ -1,8 +1,6 @@
 pragma solidity ^0.7.3;
 pragma experimental ABIEncoderV2;
 
-import 'hardhat/console.sol';
-
 import '@openzeppelin/contracts/math/SafeMath.sol';
 
 import './interfaces/IProducts.sol';
@@ -62,15 +60,6 @@ contract Trading {
     // positions being liquidated
     mapping(uint256 => bool) public liquidatingIds;
 
-    // symbol => maxRisk
-    mapping(bytes32 => uint256) public maxRisks;
-
-    // symbol => risk (current)
-    mapping(bytes32 => uint256) public risks;
-
-    // symbol => risk direction (false = long, true = short)
-    mapping(bytes32 => bool) public riskDirections;
-
     // user => bool
     mapping(address => uint256) public pausedUsers;
 
@@ -84,7 +73,6 @@ contract Trading {
     /* Events */
     event NewContracts(address products, address queue, address treasury);
     event NewMinimum(uint256 amount);
-    event NewMaxRisk(bytes32 symbol, uint256 risk);
     event NewLiquidatorReward(uint256 amount);
     event Deposited(uint256 amount);
     event Withdrew(uint256 amount);
@@ -114,14 +102,6 @@ contract Trading {
         uint256 margin,
         uint256 leverage,
         uint256 price
-    );
-
-    event PositionMarginAdded(
-        uint256 positionId,
-        address indexed sender,
-        uint256 newMargin,
-        uint256 oldMargin,
-        uint256 newLeverage
     );
 
     event PositionLiquidated(
@@ -174,20 +154,6 @@ contract Trading {
     function setCurrencyMin(uint256 _amount) external onlyOwner {
         minimumMargin = _amount;
         emit NewMinimum(_amount);
-    }
-
-    function setMaxRisk(
-        bytes32[] calldata _symbols,
-        uint256[] calldata _maxRisks
-    ) external onlyOwner {
-        require(_symbols.length <= 10, '!too_many');
-        require(_symbols.length == _maxRisks.length, '!length');
-        for (uint256 i = 0; i < _symbols.length; i++) {
-            bytes32 symbol = _symbols[i];
-            uint256 maxRisk = _maxRisks[i];
-            maxRisks[symbol] = maxRisk;
-            emit NewMaxRisk(symbol, maxRisk);
-        }
     }
 
     function setLiquidatorReward(uint256 _amount) external onlyOwner {
@@ -269,26 +235,19 @@ contract Trading {
         require(leverage <= maxLeverage, '!max_leverage');
         freeMargins[msg.sender] = freeMargins[msg.sender].sub(margin, '!balance');
         uint256 id = _queueOrder(isBuy, symbol, margin, leverage, 0, address(0));
-        console.log('Id', id, margin);
         positions[id] = Position({isBuy: isBuy, margin: SafeMathExt.safeUint64(margin), leverage: SafeMathExt.safeUint64(leverage), sender: msg.sender, symbol: bytes12(''), price: 0, block: 0, id: 0});
     }
 
     function submitOrderUpdate(
         uint256 positionId,
-        bool isBuy,
         uint256 margin
     ) external whenNotPaused {
         Position storage position = positions[positionId];
         require(position.price > 0, '!found');
         require(position.sender == msg.sender, '!authorized');
-        if (position.isBuy == isBuy) {
-            // add margin
-            _processAddMargin(msg.sender, margin, positionId);
-        } else {
-            // partial or full close
-            require(margin <= uint256(position.margin), '!margin');
-            _queueOrder(isBuy, bytes32(position.symbol), margin, uint256(position.leverage), positionId, address(0));
-        }
+        // partial or full close
+        require(margin <= uint256(position.margin), '!margin');
+        _queueOrder(!position.isBuy, bytes32(position.symbol), margin, uint256(position.leverage), positionId, address(0));
     }
 
     function liquidatePositions(uint256[] calldata positionIds) external {
@@ -338,9 +297,7 @@ contract Trading {
                 uint256 positionMargin = uint256(position.margin);
                 (uint256 pnl, bool isPnlNegative) = _calculatePnl(position, positionMargin, price);
                 if (isPnlNegative && pnl >= positionMargin) {
-                    // set position id for liquidation
-                    position.id = positionId;
-                    _processLiquidation(liquidator, position);
+                    _processLiquidation(liquidator, positionId, positionMargin, position.sender);
                 }
             } else {
                 _processClose(margin, price, positionId);
@@ -405,7 +362,6 @@ contract Trading {
         uint256 margin = uint256(position.margin);
         uint256 leverage = uint256(position.leverage);
         address sender = position.sender;
-        _evaluateNewOrderRisk(isBuy, symbol, margin, leverage, false);
         // calculate execution price
         uint256 spread = IProducts(products).getSpread(symbol);
         if (isBuy) {
@@ -421,26 +377,6 @@ contract Trading {
         userPositionIds[sender].add(id);
         // event
         emit PositionOpened(id, sender, isBuy, symbol, margin, leverage, price);
-    }
-
-    function _processAddMargin(
-        address sender,
-        uint256 margin,
-        uint256 positionId
-    ) internal {
-        Position storage position = positions[positionId];
-        freeMargins[msg.sender] = freeMargins[msg.sender].sub(margin, '!balance');
-        // update position with new margin
-        uint256 currentMargin = position.margin;
-        uint256 newMargin = currentMargin.add(margin);
-        position.margin = SafeMathExt.safeUint64(newMargin);
-        // update position with new leverage
-        uint256 ratio = newMargin.divDecimal8(currentMargin);
-        uint256 newLeverage = uint256(position.leverage).divDecimal8(ratio);
-        require(newLeverage >= SafeMathExt.UNIT8, '!too_much_margin');
-        position.leverage = SafeMathExt.safeUint64(newLeverage);
-        // event
-        emit PositionMarginAdded(positionId, sender, newMargin, currentMargin, newLeverage);
     }
 
     function _processClose(
@@ -462,14 +398,12 @@ contract Trading {
         (uint256 pnl, bool isPnlNegative) = _calculatePnl(mPosition, margin, price);
         uint256 amountToReturn;
         if (isPnlNegative && pnl >= margin) {
-            _evaluateNewOrderRisk(!mPosition.isBuy, bytes32(mPosition.symbol), positionMargin, uint256(mPosition.leverage), true);
             // position is liquidated
             delete positions[positionId];
             userPositionIds[mPosition.sender].remove(positionId);
             // transfer user margin to surplus
             ITreasury(treasury).collectFromUser(mPosition.sender, positionMargin.mulDecimal8(currencyUnit));
         } else {
-            _evaluateNewOrderRisk(!mPosition.isBuy, bytes32(mPosition.symbol), margin, uint256(mPosition.leverage), true);
             if (margin < positionMargin) {
                 // partial close, update position margin
                 Position storage position = positions[positionId];
@@ -495,64 +429,22 @@ contract Trading {
 
     function _processLiquidation(
         address liquidator,
-        Position memory position
+        uint256 positionId,
+        uint256 positionMargin,
+        address positionSender
     ) internal {
-        uint256 positionMargin = uint256(position.margin);
-        _evaluateNewOrderRisk(!position.isBuy, bytes32(position.symbol), positionMargin, uint256(position.leverage), true);
-        delete positions[position.id];
-        userPositionIds[position.sender].remove(position.id);
-        uint256 normalizedMargin = positionMargin.mulDecimal8(currencyUnit);
+        delete positions[positionId];
+        userPositionIds[positionSender].remove(positionId);
         // collect margin from user
-        ITreasury(treasury).collectFromUser(position.sender, normalizedMargin);
+        ITreasury(treasury).collectFromUser(positionSender, positionMargin.mulDecimal8(currencyUnit));
         // pay liquidatorReward % of margin to liquidator
-        freeMargins[liquidator] = freeMargins[liquidator].add(positionMargin.mul(liquidatorReward).div(100));
-        ITreasury(treasury).payToUser(liquidator, normalizedMargin.mul(liquidatorReward).div(100));
-        emit PositionLiquidated(position.id, position.sender, liquidator, positionMargin);
+        uint256 liquidatorMargin = positionMargin.mul(liquidatorReward).div(100);
+        freeMargins[liquidator] = freeMargins[liquidator].add(liquidatorMargin);
+        ITreasury(treasury).payToUser(liquidator, liquidatorMargin.mulDecimal8(currencyUnit));
+        emit PositionLiquidated(positionId, positionSender, liquidator, positionMargin);
     }
 
     /* Helpers */
-
-    function _evaluateNewOrderRisk(
-        bool isBuy,
-        bytes32 symbol,
-        uint256 margin,
-        uint256 leverage,
-        bool updateOnly
-    ) internal {
-        uint256 maxRisk = maxRisks[symbol];
-        if (!updateOnly) require(maxRisk != 0, '!maxRisk');
-        uint256 risk = risks[symbol];
-        bool isRiskShort = riskDirections[symbol];
-        uint256 amount = margin.mulDecimal8(leverage);
-        uint256 newRisk;
-        bool newDirection = isRiskShort;
-        if (isBuy) {
-            if (!isRiskShort) {
-                newRisk = risk.add(amount);
-            } else {
-                if (amount >= risk) {
-                    newRisk = amount.sub(risk);
-                    newDirection = false;
-                } else {
-                    newRisk = risk.sub(amount);
-                }
-            }
-        } else {
-            if (!isRiskShort) {
-                if (amount > risk) {
-                    newRisk = amount.sub(risk);
-                    newDirection = true;
-                } else {
-                    newRisk = risk.sub(amount);
-                }
-            } else {
-                newRisk = risk.add(amount);
-            }
-        }
-        if (!updateOnly) require(newRisk <= maxRisk, '!risk_reached');
-        risks[symbol] = newRisk;
-        if (newDirection != isRiskShort) riskDirections[symbol] = newDirection;
-    }
 
     function _calculatePnl(
         Position memory position,
@@ -563,21 +455,21 @@ contract Trading {
         uint256 positionPrice = uint256(position.price);
         if (position.isBuy) {
             if (price >= position.price) {
-                pnl = margin.mulDecimal8(positionLeverage).mulDecimal8((price.sub(position.price)).divDecimal8(positionPrice));
+                pnl = margin.mul(positionLeverage).mul(price.sub(positionPrice)).div(positionPrice).div(SafeMathExt.UNIT8);
             } else {
-                pnl = margin.mulDecimal8(positionLeverage).mulDecimal8((positionPrice.sub(price)).divDecimal8(positionPrice));
+                pnl = margin.mul(positionLeverage).mul(positionPrice.sub(price)).div(positionPrice).div(SafeMathExt.UNIT8);
                 isPnlNegative = true;
             }
         } else {
             if (price > position.price) {
-                pnl = margin.mulDecimal8(positionLeverage).mulDecimal8((price.sub(position.price)).divDecimal8(positionPrice));
+                pnl = margin.mul(positionLeverage).mul(price.sub(positionPrice)).div(positionPrice).div(SafeMathExt.UNIT8);
                 isPnlNegative = true;
             } else {
-                pnl = margin.mulDecimal8(positionLeverage).mulDecimal8((positionPrice.sub(price)).divDecimal8(positionPrice));
+                pnl = margin.mul(positionLeverage).mul(positionPrice.sub(price)).div(positionPrice).div(SafeMathExt.UNIT8);
             }
         }
         // Calculate funding to apply on this position
-        uint256 fundingToApply = margin.mulDecimal8(positionLeverage).mul(block.number.sub(uint256(position.block))).mulDecimal8(IProducts(products).getFundingRate(bytes32(position.symbol)));
+        uint256 fundingToApply = margin.mul(positionLeverage).mul(block.number.sub(uint256(position.block))).mul(IProducts(products).getFundingRate(bytes32(position.symbol))).div(1e16);
         // Subtract funding from pnl
         if (isPnlNegative) {
             pnl = pnl.add(fundingToApply);

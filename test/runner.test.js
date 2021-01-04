@@ -72,7 +72,6 @@ describe('Trading Tests', function () {
 
         // register currencies
         await this.trading.setCurrencyMin(to8Units(10));
-        await this.trading.setMaxRisk([toBytes32('BTC'), toBytes32('BBG000B9XRY4')], [to8Units(3e6), to8Units(3e6)]);
         await this.treasury.setWithdrawalLimit(toUnits(10000));
 
         // register products
@@ -231,9 +230,9 @@ describe('Trading Tests', function () {
             it(`${user} submits ${isBuy ? 'buy' : 'sell'} order update to position: [positionId: ${positionId}][margin: ${margin}]`, async function () {
 
               if (error) {
-                await expect(this.trading.connect(this.signer).submitOrderUpdate(positionId, isBuy, margin)).to.be.revertedWith(error);
+                await expect(this.trading.connect(this.signer).submitOrderUpdate(positionId, margin)).to.be.revertedWith(error);
               } else {
-                const tx = await this.trading.connect(this.signer).submitOrderUpdate(positionId, isBuy, margin);
+                const tx = await this.trading.connect(this.signer).submitOrderUpdate(positionId, margin);
                 await expectEvents(tx, event.name, [ event.body ]);
               }
 
@@ -254,15 +253,6 @@ describe('Trading Tests', function () {
                 await expectContractEvents(this.trading, 'LiquidationSubmitted', tx.blockNumber, tx.blockNumber, completedEvents);
               }
 
-            });
-
-          } else if (type ==  'check-risks') {
-            const { product } = data;
-            const { amount } = expected;
-
-            it(`checks risk for ${product}`, async function () {
-              expect(await this.trading.risks(toBytes32(product))).to.be.bignumber.equal(amount.lt(toBN(0)) ? amount.mul(toBN(-1)) : amount);
-              expect(await this.trading.riskDirections(toBytes32(product))).to.equal(amount.lt(toBN(0)) ? true : false);
             });
 
           } else {

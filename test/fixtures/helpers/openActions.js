@@ -19,7 +19,6 @@ module.exports = function(params) {
 
   const initialQueueId = init.queueId || toBN('0');
   const initialTreasuryBalance = init.treasuryBalance || toBN('0');
-  const initialRisk = init.risk || toBN('0');
   const marketClosed = data.openPrice && data.openPrice.eq(toBN('0'));
 
   return [
@@ -46,15 +45,6 @@ module.exports = function(params) {
       type: 'check-treasury-balance',
       expected: {
         balance: initialTreasuryBalance
-      }
-    },
-    {
-      type: 'check-risks',
-      data: {
-        product: data.product,
-      },
-      expected: {
-        amount: initialRisk
       }
     },
     {
@@ -186,16 +176,6 @@ module.exports = function(params) {
           price: execPrice({ isBuy: data.isBuy, price: data.openPrice })
         }
       ]
-    },
-    {
-      type: 'check-risks',
-      skip: !data.openPrice,
-      data: {
-        product: data.product,
-      },
-      expected: {
-        amount: (marketClosed || openError) ? initialRisk : initialRisk.add(data.margin.mul(data.leverage).div(UNIT8).mul(data.isBuy ? toBN(1) : toBN(-1)))
-      }
     }
   ];
 }

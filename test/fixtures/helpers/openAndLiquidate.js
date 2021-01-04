@@ -123,20 +123,6 @@ module.exports = function(params) {
             price: execPrice({ isBuy: data.isBuy, price: data.openPrice })
           }
         ]
-      },
-      {
-        type: 'check-risks',
-        data: {
-          product: data.product,
-        },
-        expected: {
-          amount: 
-            (!(marketClosed || error) ?
-              toBN(0)
-            : 
-              data.margin.mul(data.leverage).div(UNIT8).mul(data.isBuy ? toBN(1) : toBN(-1))
-            )
-        }
       }
     ]
   };
