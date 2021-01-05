@@ -42,6 +42,14 @@ The Cap protocol is currently deployed on the following networks.
 | Trading | [0x4ecd1C5b4E7b990F7d9bD76fF88cc616fCBdFfd4](https://ropsten.etherscan.io/address/0x4ecd1C5b4E7b990F7d9bD76fF88cc616fCBdFfd4) |
 | Queue | [0xe189cD61CCC093258Ec20E00821efb854b8D9B7F](https://ropsten.etherscan.io/address/0xe189cD61CCC093258Ec20E00821efb854b8D9B7F) |
 
+```bash
+# list ropsten proposals
+npx hardhat --network ropsten gov:listProposals --governance $GOVERNANCE_ADDRESS
+
+# get the details of a particular ropsten proposal
+npx hardhat --network ropsten gov:getProposal --governance $GOVERNANCE_ADDRESS
+```
+
 ### Mainnet
 
 | Contract      | Address       |
