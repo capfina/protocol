@@ -59,7 +59,6 @@ describe("Trading", () => {
 
     // register currencies
     await this.trading.setCurrencyMin(to8Units(10));
-    await this.trading.setMaxRisk([toBytes32('BTC'), toBytes32('BBG000B9XRY4')], [to8Units(3e6), to8Units(3e6)]);
     await this.treasury.setWithdrawalLimit(toUnits(10000));
 
     // register products
@@ -122,7 +121,6 @@ describe("Trading", () => {
     await this.trading.pause();
     await expect(this.trading.submitOrderUpdate(
       defaults.positionId,
-      true,
       defaults.margin
     )).to.be.revertedWith('!paused');
   });

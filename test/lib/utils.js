@@ -1,4 +1,5 @@
-const { ethers } = require("hardhat");
+const { ethers } = require('hardhat');
+const BigNumber = require('bignumber.js');
 const { ecsign } = require('ethereumjs-util');
 const { isBN } = require('./helpers');
 const { toUtf8Bytes, defaultAbiCoder, solidityPack } = ethers.utils;
@@ -26,6 +27,18 @@ const to8Units = function(value) {
 }
 
 exports.to8Units = to8Units;
+
+const toDecimal = function(value) {
+  return BigNumber(value.toString());
+}
+
+exports.toDecimal = toDecimal;
+
+const toDecimal8 = function(value) {
+  return BigNumber(value.toString()).dividedBy(BigNumber(1e8));
+}
+
+exports.toDecimal8 = toDecimal8;
 
 exports.toBN = function(value) {
   return ethers.utils.parseUnits(`${value}`, 0);

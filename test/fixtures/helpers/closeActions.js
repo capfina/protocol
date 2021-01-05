@@ -17,7 +17,6 @@ module.exports = function(params) {
   // } = data;
 
   const initialQueueId = init.queueId || toBN('0');
-  const initialRisk = init.risk || toBN('0');
   const marketClosed = data.closePrice && data.closePrice.eq(toBN('0'));
 
   const amountToReturn = data.liquidated ? toBN('0') : calculateAmountToReturn({
@@ -115,20 +114,6 @@ module.exports = function(params) {
           price: execPrice({ isBuy: data.isBuy, price: data.openPrice })
         }
       ]
-    },
-    {
-      type: 'check-risks',
-      data: {
-        product: data.product,
-      },
-      expected: {
-        amount: 
-          ((!marketClosed && (data.liquidated || (data.closeMargin).eq(data.margin))) ?
-            initialRisk
-          : 
-            initialRisk.add(data.margin.sub(marketClosed ? toBN('0') : data.closeMargin).mul(data.leverage).div(UNIT8).mul(data.isBuy ? toBN(1) : toBN(-1)))
-          )
-      }
     }
   ];
 }

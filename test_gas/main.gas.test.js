@@ -59,7 +59,6 @@ describe('Gas Profiler', function () {
 
     // register currencies
     await this.trading.setCurrencyMin(to8Units(10));
-    await this.trading.setMaxRisk([toBytes32('BTC')], [to8Units(3e6)]);
     await this.treasury.setWithdrawalLimit(toUnits(10000));
 
     // register products
@@ -114,7 +113,7 @@ describe('Gas Profiler', function () {
       });
 
       it(`should consume less than ${expectedGas} gas`, async function () {
-        const tx = await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), false, to8Units('40'));
+        const tx = await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), to8Units('40'));
         await expectContractEvents(this.trading, 'OrderSubmitted', tx.blockNumber, tx.blockNumber, [{}]);
         const receipt = await tx.wait(0);
         console.log('        gasUsed:', receipt.gasUsed.toString());
@@ -170,7 +169,7 @@ describe('Gas Profiler', function () {
         // set prices and process
         await this.queue.connect(this.oracle).setPricesAndProcessQueue([to8Units('400')], toBN(1), toBN(2));
         // queue close order
-        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), false, to8Units('40'));
+        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), to8Units('40'));
       });
 
       it(`should consume less than ${expectedGas} gas`, async function () {
@@ -190,7 +189,7 @@ describe('Gas Profiler', function () {
         // set prices and process
         await this.queue.connect(this.oracle).setPricesAndProcessQueue([to8Units('400')], toBN(1), toBN(2));
         // queue close order
-        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), false, to8Units('40'));
+        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), to8Units('40'));
       });
 
       it(`should consume less than ${expectedGas} gas`, async function () {
@@ -210,7 +209,7 @@ describe('Gas Profiler', function () {
         // set prices and process
         await this.queue.connect(this.oracle).setPricesAndProcessQueue([to8Units('400')], toBN(1), toBN(2));
         // queue close order
-        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), false, to8Units('40'));
+        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), to8Units('40'));
       });
 
       it(`should consume less than ${expectedGas} gas`, async function () {
@@ -233,7 +232,7 @@ describe('Gas Profiler', function () {
         // set prices and process
         await this.queue.connect(this.oracle).setPricesAndProcessQueue([to8Units('400')], toBN(1), toBN(2));
         // queue close order
-        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), false, to8Units('20'));
+        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), to8Units('20'));
       });
 
       it(`should consume less than ${expectedGas} gas`, async function () {
@@ -253,7 +252,7 @@ describe('Gas Profiler', function () {
         // set prices and process
         await this.queue.connect(this.oracle).setPricesAndProcessQueue([to8Units('400')], toBN(1), toBN(2));
         // queue close order
-        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), false, to8Units('20'));
+        await this.trading.connect(this.user_1).submitOrderUpdate(toBN(1), to8Units('20'));
       });
 
       it(`should consume less than ${expectedGas} gas`, async function () {

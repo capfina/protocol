@@ -111,14 +111,11 @@ Submitted orders are queued while awaiting a price from the oracle network. Once
 ### Add margin or close a position
 
 ```
-Trading.submitOrderUpdate(1, true, 200 * 10^8);
+Trading.submitOrderUpdate(1, 200 * 10^8);
 ```
 
 - uint256 positionId
-- bool isBuy
 - uint256 margin
-
-Set `isBuy` in the same direction as the target position to add margin or in the opposite direction to close the passed amount of margin.
 
 ## Governance
 
@@ -217,7 +214,6 @@ npx hardhat gov:executeProposal --governance "${GOVERNANCE_ADDRESS}"
 - [Register new products](./example_proposals/register_products.js)
 - [Pause users](./example_proposals/pause_users.js)
 - [Update daily withdrawal limit](./example_proposals/update_daily_withdrawal_limit.js)
-- [Update max risk for a product](./example_proposals/update_max_risk.js)
 - [Swap treasury funds on Uniswap](./example_proposals/swap_treasury_funds.js)
 
 ## Scripts
