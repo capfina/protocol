@@ -36,11 +36,11 @@ The Cap protocol is currently deployed on the following networks.
 
 | Contract      | Address       |
 | ------------- |---------------|
-| Governance | [0xd864bcf4841e93A525e037Dd5b2Ed8Fe801Cb8fC](https://ropsten.etherscan.io/address/0xd864bcf4841e93A525e037Dd5b2Ed8Fe801Cb8fC) |
-| Treasury | [0xDc240537E16acdaCCC1AdC7c60D6D3689113Ab1A](https://ropsten.etherscan.io/address/0xDc240537E16acdaCCC1AdC7c60D6D3689113Ab1A) |
-| Products | [0x9BA6F4bE7ea9C769C5f81c7559062eB062fbe94C](https://ropsten.etherscan.io/address/0x9BA6F4bE7ea9C769C5f81c7559062eB062fbe94C) |
-| Trading | [0x101c05ecfb8fcdF75d13E72fbA0db651e1709c6d](https://ropsten.etherscan.io/address/0x101c05ecfb8fcdF75d13E72fbA0db651e1709c6d) |
-| Queue | [0xdbce33B3e48ddbAF69b1703be8c39Ab67297D953](https://ropsten.etherscan.io/address/0xdbce33B3e48ddbAF69b1703be8c39Ab67297D953) |
+| Governance | [0xa6Dd9D2d978F76F9f325E79207570eD233104106](https://ropsten.etherscan.io/address/0xa6Dd9D2d978F76F9f325E79207570eD233104106) |
+| Treasury | [0x88F4B165EAB80d3607678d54CF9dA2E1EAE17986](https://ropsten.etherscan.io/address/0x88F4B165EAB80d3607678d54CF9dA2E1EAE17986) |
+| Products | [0x2DDd0ce3aCb5e5F5d6B9D754E733b3eFFb3C1Ab8](https://ropsten.etherscan.io/address/0x2DDd0ce3aCb5e5F5d6B9D754E733b3eFFb3C1Ab8) |
+| Trading | [0x4ecd1C5b4E7b990F7d9bD76fF88cc616fCBdFfd4](https://ropsten.etherscan.io/address/0x4ecd1C5b4E7b990F7d9bD76fF88cc616fCBdFfd4) |
+| Queue | [0xe189cD61CCC093258Ec20E00821efb854b8D9B7F](https://ropsten.etherscan.io/address/0xe189cD61CCC093258Ec20E00821efb854b8D9B7F) |
 
 ### Mainnet
 
