@@ -2,8 +2,8 @@
   "manifestVersion": "3.1",
   "impls": {
     "7bc626569d68f8eab3ffe3f3906dc6651a19963ec3a5b52a845e556851a36ea6": {
-      "address": "0x1881e51915129eE5e5dCDA403d2a92346BaFB139",
-      "txHash": "0xc968813c232500adf4de90bf42d7bfb59d6824993db8a04578ddf8176c46af18",
+      "address": "0x750ceddA961C4B3F5578DE9430Fe42e2E5AE29d7",
+      "txHash": "0x73d24fc65bc27467af36606a161646d41394222e77920ade3c1a8b9b885381a8",
       "layout": {
         "storage": [
           {
@@ -153,8 +153,8 @@
       }
     },
     "ab3fdf2a710a1920b1fa254629278fa9a98bdf20f08ce5ac0ea9953e90bc5c07": {
-      "address": "0x7a1EfED5f032375a64B75BCfea5ACc1584e017c0",
-      "txHash": "0x8025ed656be5af75105fa505045fd215e86819bfd618de4f5bb8ab9a21caca11",
+      "address": "0xadF4dbC984Bd79C63407d0BD1C77fF7Ffe951Da9",
+      "txHash": "0x3401015f67abf2179c67ec5ed84c3f5296f67e6ece3d6db15e347abcdc9290fc",
       "layout": {
         "storage": [
           {
@@ -223,8 +223,8 @@
       }
     },
     "1e63fa3a6b08159da383f98925bf20429507a7ca1bc65bf93be461f86898ccce": {
-      "address": "0xC70bBb412204F4c8099b6416fcEC35d946f4BC3d",
-      "txHash": "0x2f37eac343f353433e80c3ad26e836abdfb7ce9fddbe70cc347d15fb28a208b4",
+      "address": "0x200520361BB5A85419984A66498eE39816111a00",
+      "txHash": "0x64cba132f4215e49d382587cc2e224c418bb5bf3a60b0b1b1ac7f06afda74b53",
       "layout": {
         "storage": [
           {
@@ -260,8 +260,8 @@
       }
     },
     "14fe98ae27d3134cd47cad2d4d18541538f22de9c4578d9f225f14ce78d3c4d4": {
-      "address": "0x43c4722fAEF419e6CDBc836222F6B7747ac92667",
-      "txHash": "0x3c42b47083e46e64c51b0a8135f49c3d66a910ef39d0a36704b74a6ea502de5a",
+      "address": "0x15CD85ec525Ad76f67c656459f5f7B6f80bCcC7B",
+      "txHash": "0x03c62e5d4e621d13e24656ca599849931e9dbe5c123e2c55c68f96c2d41dd536",
       "layout": {
         "storage": [
           {
@@ -323,118 +323,100 @@
         }
       }
     },
-    "33e409dd14b6f4e5b4087f72598b63d9095e7e58d6116ba28ccd7bef086da18f": {
-      "address": "0x9D870bC417F261Ff6a41142D1E15B375A91215ad",
-      "txHash": "0x0859de442f75732a2b19aa5d0e3d7260f7269c21baeba96fb5af590aec6c7bb4",
+    "a8e1d4641caba0acbadd35bf1a41209c470c7e64729cc669a563ea11d4ef5f69": {
+      "address": "0x966779C429be245eeEa941167e821a7029222AB3",
+      "txHash": "0x67331cbcb4dfd4dc0666398d52ce6c69535325ca8f97eed9a0fb4a696a59d336",
       "layout": {
         "storage": [
           {
             "contract": "Trading",
             "label": "products",
             "type": "t_address",
-            "src": "contracts/Trading.sol:40"
+            "src": "contracts/Trading.sol:38"
           },
           {
             "contract": "Trading",
             "label": "queue",
             "type": "t_address",
-            "src": "contracts/Trading.sol:41"
+            "src": "contracts/Trading.sol:39"
           },
           {
             "contract": "Trading",
             "label": "treasury",
             "type": "t_address",
-            "src": "contracts/Trading.sol:42"
+            "src": "contracts/Trading.sol:40"
           },
           {
             "contract": "Trading",
             "label": "currency",
             "type": "t_address",
-            "src": "contracts/Trading.sol:45"
+            "src": "contracts/Trading.sol:43"
           },
           {
             "contract": "Trading",
             "label": "minimumMargin",
             "type": "t_uint256",
-            "src": "contracts/Trading.sol:48"
+            "src": "contracts/Trading.sol:46"
           },
           {
             "contract": "Trading",
             "label": "currencyUnit",
             "type": "t_uint256",
-            "src": "contracts/Trading.sol:51"
+            "src": "contracts/Trading.sol:49"
           },
           {
             "contract": "Trading",
             "label": "freeMargins",
             "type": "t_mapping(t_address,t_uint256)",
-            "src": "contracts/Trading.sol:54"
+            "src": "contracts/Trading.sol:52"
           },
           {
             "contract": "Trading",
             "label": "positions",
-            "type": "t_mapping(t_uint256,t_struct(Position)3490_storage)",
-            "src": "contracts/Trading.sol:57"
+            "type": "t_mapping(t_uint256,t_struct(Position)3489_storage)",
+            "src": "contracts/Trading.sol:55"
           },
           {
             "contract": "Trading",
             "label": "userPositionIds",
-            "type": "t_mapping(t_address,t_struct(Set)7298_storage)",
-            "src": "contracts/Trading.sol:60"
+            "type": "t_mapping(t_address,t_struct(Set)6863_storage)",
+            "src": "contracts/Trading.sol:58"
           },
           {
             "contract": "Trading",
             "label": "liquidatingIds",
             "type": "t_mapping(t_uint256,t_bool)",
-            "src": "contracts/Trading.sol:63"
-          },
-          {
-            "contract": "Trading",
-            "label": "maxRisks",
-            "type": "t_mapping(t_bytes32,t_uint256)",
-            "src": "contracts/Trading.sol:66"
-          },
-          {
-            "contract": "Trading",
-            "label": "risks",
-            "type": "t_mapping(t_bytes32,t_uint256)",
-            "src": "contracts/Trading.sol:69"
-          },
-          {
-            "contract": "Trading",
-            "label": "riskDirections",
-            "type": "t_mapping(t_bytes32,t_bool)",
-            "src": "contracts/Trading.sol:72"
+            "src": "contracts/Trading.sol:61"
           },
           {
             "contract": "Trading",
             "label": "pausedUsers",
             "type": "t_mapping(t_address,t_uint256)",
-            "src": "contracts/Trading.sol:75"
+            "src": "contracts/Trading.sol:64"
           },
           {
             "contract": "Trading",
             "label": "liquidatorReward",
             "type": "t_uint256",
-            "src": "contracts/Trading.sol:78"
+            "src": "contracts/Trading.sol:67"
           },
           {
             "contract": "Trading",
             "label": "owner",
             "type": "t_address",
-            "src": "contracts/Trading.sol:80"
+            "src": "contracts/Trading.sol:69"
           },
           {
             "contract": "Trading",
             "label": "initialized",
             "type": "t_bool",
-            "src": "contracts/Trading.sol:81"
+            "src": "contracts/Trading.sol:70"
           },
           {
             "contract": "Trading",
             "label": "paused",
             "type": "t_bool",
-            "src": "contracts/Trading.sol:82"
+            "src": "contracts/Trading.sol:71"
           }
         ],
         "types": {
@@ -447,20 +429,14 @@
           "t_mapping(t_address,t_uint256)": {
             "label": "mapping(address => uint256)"
           },
-          "t_mapping(t_uint256,t_struct(Position)3490_storage)": {
+          "t_mapping(t_uint256,t_struct(Position)3489_storage)": {
             "label": "mapping(uint256 => struct Trading.Position)"
           },
-          "t_mapping(t_address,t_struct(Set)7298_storage)": {
+          "t_mapping(t_address,t_struct(Set)6863_storage)": {
             "label": "mapping(address => struct UintSet.Set)"
           },
           "t_mapping(t_uint256,t_bool)": {
             "label": "mapping(uint256 => bool)"
-          },
-          "t_mapping(t_bytes32,t_uint256)": {
-            "label": "mapping(bytes32 => uint256)"
-          },
-          "t_mapping(t_bytes32,t_bool)": {
-            "label": "mapping(bytes32 => bool)"
           },
           "t_bool": {
             "label": "bool"
@@ -469,8 +445,8 @@
       }
     },
     "ca375511904dc1b4767d68ef486b2a1a329c7864a881f4d3b4cae76c9e5e2db0": {
-      "address": "0x05769d65d3D52a9f71648BD9643184be01933507",
-      "txHash": "0x8dc834e227b284fbcc947aa849e73736a2a0d77427cb557682be362d7be13e9d",
+      "address": "0xB6Df785e1e7DF3Db1bbc7509c8fcb629a98a3975",
+      "txHash": "0x042f2e37dfce6bd048fca67ac2792783fed2dc6d3578c37137caf44b99640448",
       "layout": {
         "storage": [
           {
@@ -536,7 +512,7 @@
           {
             "contract": "Treasury",
             "label": "uniswapRouter",
-            "type": "t_contract(IUniswap)7045",
+            "type": "t_contract(IUniswap)6610",
             "src": "contracts/Treasury.sol:52"
           },
           {
@@ -574,7 +550,7 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_contract(IUniswap)7045": {
+          "t_contract(IUniswap)6610": {
             "label": "contract IUniswap"
           },
           "t_bool": {
@@ -585,7 +561,7 @@
     }
   },
   "admin": {
-    "address": "0x5CFfD7D37591CA40066a4D863F24e5C050D6f99E",
-    "txHash": "0x3c0a3cd928bcd4e9af3cd49ff53ed574b8f60ff887fc2a9a2df56998185337da"
+    "address": "0x693b325b5EEd6bFAeC59a8C1e089a599Dd48Dd17",
+    "txHash": "0xb1f7d4fc242997c883edd2a9b8d7b16042421d0927248e36ba2878b75a3fb35d"
   }
 }
