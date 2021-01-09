@@ -41,6 +41,7 @@ The Cap protocol is currently deployed on the following networks.
 | Products | [0x2DDd0ce3aCb5e5F5d6B9D754E733b3eFFb3C1Ab8](https://ropsten.etherscan.io/address/0x2DDd0ce3aCb5e5F5d6B9D754E733b3eFFb3C1Ab8) |
 | Trading | [0x4ecd1C5b4E7b990F7d9bD76fF88cc616fCBdFfd4](https://ropsten.etherscan.io/address/0x4ecd1C5b4E7b990F7d9bD76fF88cc616fCBdFfd4) |
 | Queue | [0xe189cD61CCC093258Ec20E00821efb854b8D9B7F](https://ropsten.etherscan.io/address/0xe189cD61CCC093258Ec20E00821efb854b8D9B7F) |
+| Oracle | [0x445c3facc21cc4ef09ee07e476c8b823c1434fdb](https://ropsten.etherscan.io/address/0x445c3facc21cc4ef09ee07e476c8b823c1434fdb) |
 
 ```bash
 # list ropsten proposals
@@ -59,6 +60,7 @@ npx hardhat --network ropsten gov:getProposal --governance $GOVERNANCE_ADDRESS
 | Products | N/A      |
 | Trading | N/A      |
 | Queue | N/A      |
+} Oracle | [0x54A5675B467aB765F12609d4E95AcF0e3e893676](https://etherscan.io/address/0x54A5675B467aB765F12609d4E95AcF0e3e893676) |
 
 ## Protocol Math
 
