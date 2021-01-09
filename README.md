@@ -118,7 +118,7 @@ Trading.submitOrder(true, bytes32('BTC'), 500 * 10^8, 20 * 10^8);
 
 Submitted orders are queued while awaiting a price from the oracle network. Once that price is available, they are executed and a new position is opened.
 
-### Add margin or close a position
+### Fully or partially close a position
 
 ```
 Trading.submitOrderUpdate(1, 200 * 10^8);
