@@ -60,7 +60,7 @@ npx hardhat --network ropsten gov:getProposal --governance $GOVERNANCE_ADDRESS
 | Products | N/A      |
 | Trading | N/A      |
 | Queue | N/A      |
-} Oracle | [0x54A5675B467aB765F12609d4E95AcF0e3e893676](https://etherscan.io/address/0x54A5675B467aB765F12609d4E95AcF0e3e893676) |
+| Oracle | [0x54A5675B467aB765F12609d4E95AcF0e3e893676](https://etherscan.io/address/0x54A5675B467aB765F12609d4E95AcF0e3e893676) |
 
 ## Protocol Math
 
