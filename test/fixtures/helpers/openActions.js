@@ -4,7 +4,7 @@ const { execPrice } = require('./calculations');
 module.exports = function(params) {
   const {
     user,
-    init, // { amount, treasuryBalance, queueId }
+    init, // { amount, freeMargin, treasuryBalance, queueId }
     data,
     openError
   } = params;
@@ -17,6 +17,8 @@ module.exports = function(params) {
   //   openPrice
   // } = data;
 
+  const initialFreeMargin = init.freeMargin || toBN('0');
+  const initialBalance = init.balance || toBN('0');
   const initialQueueId = init.queueId || toBN('0');
   const initialTreasuryBalance = init.treasuryBalance || toBN('0');
   const marketClosed = data.openPrice && data.openPrice.eq(toBN('0'));
@@ -36,8 +38,8 @@ module.exports = function(params) {
         user
       },
       expected: {
-        freeMargin: toBN('0'),
-        balance: toBN('0'),
+        freeMargin: initialFreeMargin,
+        balance: initialBalance,
         currencyBalance: init.amount.mul(UNIT).div(UNIT8)
       }
     },
@@ -61,8 +63,8 @@ module.exports = function(params) {
         user
       },
       expected: {
-        freeMargin: init.amount,
-        balance: init.amount.mul(UNIT).div(UNIT8),
+        freeMargin: initialFreeMargin.add(init.amount),
+        balance: initialBalance.add(init.amount.mul(UNIT).div(UNIT8)),
         currencyBalance: toBN('0')
       }
     },
@@ -98,8 +100,8 @@ module.exports = function(params) {
         user
       },
       expected: {
-        freeMargin: init.amount.sub(data.margin),
-        balance: init.amount.mul(UNIT).div(UNIT8),
+        freeMargin: initialFreeMargin.add(init.amount).sub(data.margin),
+        balance: initialBalance.add(init.amount.mul(UNIT).div(UNIT8)),
         currencyBalance: toBN('0')
       }
     },
@@ -155,8 +157,8 @@ module.exports = function(params) {
         user
       },
       expected: {
-        freeMargin: init.amount.sub((marketClosed || openError) ? toBN('0') : data.margin),
-        balance: init.amount.mul(UNIT).div(UNIT8),
+        freeMargin: initialFreeMargin.add(init.amount).sub((marketClosed || openError) ? toBN('0') : data.margin),
+        balance: initialBalance.add(init.amount.mul(UNIT).div(UNIT8)),
         currencyBalance: toBN('0')
       }
     },

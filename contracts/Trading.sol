@@ -440,7 +440,6 @@ contract Trading {
         // pay liquidatorReward % of margin to liquidator
         uint256 liquidatorMargin = positionMargin.mul(liquidatorReward).div(100);
         freeMargins[liquidator] = freeMargins[liquidator].add(liquidatorMargin);
-        ITreasury(treasury).payToUser(liquidator, liquidatorMargin.mulDecimal8(currencyUnit));
         emit PositionLiquidated(positionId, positionSender, liquidator, positionMargin);
     }
 

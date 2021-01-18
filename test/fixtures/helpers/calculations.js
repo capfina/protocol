@@ -13,3 +13,5 @@ exports.pnl = pnl;
 
 const calculateAmountToReturn = (params) => params.closeMargin.add(pnl(params));
 exports.calculateAmountToReturn = calculateAmountToReturn;
+
+exports.zeroIfNegative = (amount) => amount.lt(toBN(0)) ? toBN(0) : amount;
