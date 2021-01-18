@@ -179,16 +179,17 @@ contract Treasury {
         address user,
         uint256 amount
     ) external onlyTrading {
-        balances[user] = balances[user].sub(amount);
-        totalUserBalance = totalUserBalance.sub(amount);
-    }
+        uint256 userBalance = balances[user];
 
-    function payToUser(
-        address user,
-        uint256 amount
-    ) external onlyTrading {
-        balances[user] = balances[user].add(amount);
-        totalUserBalance = totalUserBalance.add(amount);
+        if (userBalance > 0) {
+            if (amount >= userBalance) {
+                balances[user] = 0;
+                totalUserBalance = totalUserBalance.sub(userBalance, '!totalUserBalance');
+            } else {
+                balances[user] = userBalance.sub(amount);
+                totalUserBalance = totalUserBalance.sub(amount, '!totalUserBalance');
+            }
+        }
     }
 
     function getUserBalance(

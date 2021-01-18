@@ -81,42 +81,6 @@ describe('Treasury', function () {
     });
   });
 
-  describe('payToUser/collectFromUser(user, amount)', function () {
-    it('successfully updates user balance', async function () {
-      const user_1 = this.user_1.address;
-      const user_2 = this.user_2.address;
-
-      expect(await this.treasury.getUserBalance(user_1)).to.be.bignumber.equal(toUnits(0));
-      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(0));
-
-      await this.treasury.connect(this.trading).payToUser(user_1, toUnits(10000));
-      expect(await this.treasury.getUserBalance(user_1)).to.be.bignumber.equal(toUnits(10000));
-      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(10000));
-
-      await this.treasury.connect(this.trading).payToUser(user_2, toUnits(10000));
-      expect(await this.treasury.getUserBalance(user_2)).to.be.bignumber.equal(toUnits(10000));
-      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(20000));
-
-      await this.treasury.connect(this.trading).collectFromUser(user_1, toUnits(10000));
-      expect(await this.treasury.getUserBalance(user_1)).to.be.bignumber.equal(toUnits(0));
-      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(10000));
-
-      await this.treasury.connect(this.trading).collectFromUser(user_2, toUnits(10000));
-      expect(await this.treasury.getUserBalance(user_2)).to.be.bignumber.equal(toUnits(0));
-      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(0));
-    });
-
-    it('fails to update user balance if not owner', async function () {
-      await expect(
-        this.treasury.connect(this.user_1).payToUser(this.user_1.address, toUnits(10000)),
-      ).to.be.revertedWith('!authorized');
-
-      await expect(
-        this.treasury.connect(this.user_1).collectFromUser(this.user_1.address, toUnits(10000)),
-      ).to.be.revertedWith('!authorized');
-    });
-  });
-
   describe('userDeposit(user, amount)', function () {
     beforeEach(async function () {
       await this.dai.mint(this.user_1.address, toUnits(10000));
@@ -152,6 +116,43 @@ describe('Treasury', function () {
       await expect(
         this.treasury.connect(this.trading).userDeposit(user_1, toUnits(10001)),
       ).to.be.revertedWith('ERC20: transfer amount exceeds balance');
+    });
+  });
+
+  describe('collectFromUser(user, amount)', function () {
+    it('successfully updates user balance', async function () {
+      const user_1 = this.user_1.address;
+      const user_2 = this.user_2.address;
+
+      expect(await this.treasury.getUserBalance(user_1)).to.be.bignumber.equal(toUnits(0));
+      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(0));
+
+      await this.dai.mint(this.user_1.address, toUnits(10000));
+      await this.dai.connect(this.user_1).approve(this.treasury.address, toUnits(10000));
+      await this.treasury.connect(this.trading).userDeposit(user_1, toUnits(10000));
+      expect(await this.treasury.getUserBalance(user_1)).to.be.bignumber.equal(toUnits(10000));
+      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(10000));
+
+      await this.dai.mint(this.user_2.address, toUnits(10000));
+      await this.dai.connect(this.user_2).approve(this.treasury.address, toUnits(10000));
+      await this.treasury.connect(this.trading).userDeposit(user_2, toUnits(10000));
+      expect(await this.treasury.getUserBalance(user_2)).to.be.bignumber.equal(toUnits(10000));
+      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(20000));
+
+      await this.treasury.connect(this.trading).collectFromUser(user_1, toUnits(10000));
+      expect(await this.treasury.getUserBalance(user_1)).to.be.bignumber.equal(toUnits(0));
+      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(10000));
+
+      // try to collect more than user balance
+      await this.treasury.connect(this.trading).collectFromUser(user_2, toUnits(30000));
+      expect(await this.treasury.getUserBalance(user_2)).to.be.bignumber.equal(toUnits(0));
+      expect(await this.treasury.getTotalUserBalance()).to.be.bignumber.equal(toUnits(0));
+    });
+
+    it('fails to update user balance if not owner', async function () {
+      await expect(
+        this.treasury.connect(this.user_1).collectFromUser(this.user_1.address, toUnits(10000)),
+      ).to.be.revertedWith('!authorized');
     });
   });
 

@@ -1,5 +1,5 @@
 const { toBytes32, toBytes32_padded, toBytes12_padded, toUnits, to8Units, toBN, UNIT8, UNIT } = require('../../lib/utils.js');
-const { execPrice, calculateAmountToReturn } = require('./calculations');
+const { execPrice, calculateAmountToReturn, zeroIfNegative } = require('./calculations');
 
 module.exports = function(params) {
   const {
@@ -16,6 +16,8 @@ module.exports = function(params) {
   //   openPrice
   // } = data;
 
+  const initialFreeMargin = init.freeMargin || toBN('0');
+  const initialBalance = init.balance || toBN('0');
   const initialQueueId = init.queueId || toBN('0');
   const marketClosed = data.closePrice && data.closePrice.eq(toBN('0'));
 
@@ -34,7 +36,6 @@ module.exports = function(params) {
       user,
       data: {
         positionId: initialQueueId.add(toBN(1)),
-        isBuy: !data.isBuy,
         margin: data.closeMargin
       },
       expected: {
@@ -93,8 +94,8 @@ module.exports = function(params) {
         user
       },
       expected: {
-        freeMargin: init.amount.sub(data.margin).add(marketClosed ? toBN('0') : amountToReturn),
-        balance: (!marketClosed && (data.closeMargin).gt(amountToReturn)) ? init.amount.add(amountToReturn.sub(data.liquidated ? data.margin : data.closeMargin)).mul(UNIT).div(UNIT8) : init.amount.mul(UNIT).div(UNIT8),
+        freeMargin: initialFreeMargin.add(init.amount).sub(data.margin).add(marketClosed ? toBN('0') : amountToReturn),
+        balance: (!marketClosed && (data.closeMargin).gt(amountToReturn)) ? zeroIfNegative(initialBalance.add(init.amount.add(amountToReturn.sub(data.liquidated ? data.margin : data.closeMargin)).mul(UNIT).div(UNIT8))) : zeroIfNegative(initialBalance.add(init.amount.mul(UNIT).div(UNIT8))),
         currencyBalance: toBN('0')
       }
     },
