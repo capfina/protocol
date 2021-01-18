@@ -53,13 +53,15 @@ npx hardhat --network ropsten gov:getProposal --governance $GOVERNANCE_ADDRESS
 
 ### Mainnet
 
+npx hardhat --network mainnet deploy:verify --cap 0x43044f861ec040DB59A7e324c40507adDb673142 --dai 0x6b175474e89094c44da98b954eedeac495271d0f  --governance 0x16F8637360e88a8C2fDA90dAD68a3dE816eF0162 --products 0x5777dc3Cc06D55104C63ECDd48CC88908B6ca3d9 --queue 0x80334765d437e8e6eac5377FB37a0028D71e0167 --trading 0x5e4974ca44830f6418c286b4117cf2cee5ce3e47 --treasury 0x6eB80143761ddfE75D5EA87D913EBc1ebd68DE81
+
 | Contract      | Address       |
 | ------------- |---------------|
-| Governance      | N/A |
-| Treasury      | N/A      |
-| Products | N/A      |
-| Trading | N/A      |
-| Queue | N/A      |
+| Governance      | [0x16F8637360e88a8C2fDA90dAD68a3dE816eF0162](https://etherscan.io/address/0x16F8637360e88a8C2fDA90dAD68a3dE816eF0162) |
+| Treasury      | [0x6eB80143761ddfE75D5EA87D913EBc1ebd68DE81](https://etherscan.io/address/0x6eB80143761ddfE75D5EA87D913EBc1ebd68DE81) |
+| Products | [0x5777dc3Cc06D55104C63ECDd48CC88908B6ca3d9](https://etherscan.io/address/0x5777dc3Cc06D55104C63ECDd48CC88908B6ca3d9) |
+| Trading | [0x5e4974ca44830f6418c286b4117cf2cee5ce3e47](https://etherscan.io/address/0x5e4974ca44830f6418c286b4117cf2cee5ce3e47) |
+| Queue | [0x80334765d437e8e6eac5377FB37a0028D71e0167](https://etherscan.io/address/0x80334765d437e8e6eac5377FB37a0028D71e0167) |
 | Oracle | [0x54A5675B467aB765F12609d4E95AcF0e3e893676](https://etherscan.io/address/0x54A5675B467aB765F12609d4E95AcF0e3e893676) |
 
 ## Protocol Math
