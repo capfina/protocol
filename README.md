@@ -225,6 +225,7 @@ npx hardhat gov:executeProposal --governance "${GOVERNANCE_ADDRESS}"
 - [Pause users](./example_proposals/pause_users.js)
 - [Update daily withdrawal limit](./example_proposals/update_daily_withdrawal_limit.js)
 - [Swap treasury funds on Uniswap](./example_proposals/swap_treasury_funds.js)
+- [Upgrade Contract To Latest Implementation](./example_proposals/upgrade_contract.js)
 
 ## Scripts
 

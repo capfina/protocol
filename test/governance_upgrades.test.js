@@ -4,8 +4,8 @@ const chai = require('chai');
 const { deployContract } = waffle;
 const provider = waffle.provider;
 const Proposal = require('../lib/proposals/Proposal');
-const { getDeploymentConfig, getProxyAdminAddress } = require('../lib/utils');
 const AdminUpgradeabilityProxyABI = require('../node_modules/@openzeppelin/upgrades-core/artifacts/AdminUpgradeabilityProxy.json');
+const ADMIN_SLOT = '0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103';
 
 const { accounts, privateKeys, expectIncludes, expectEvents, expectContractEvents, isBN } = require('./lib/helpers.js');
 const { toBytes32, toBytes32_padded, toBN, toUnits, to8Units, address0, MAX_UINT256, signPermit } = require('./lib/utils.js');
@@ -80,13 +80,9 @@ describe.skip('Governance Upgrades Proposals', function () {
     this.votingPeriod = await this.governance.votingPeriod();
     this.executablePeriod = await this.governance.executablePeriod();
 
-    const DC = getDeploymentConfig(network.name);
-    this.proxyAdminAddress = getProxyAdminAddress(DC);
-
     this.proposalOptions = {
       web3,
       artifacts,
-      proxyAdminAddress: this.proxyAdminAddress,
       governanceAddress: this.governance.address
     }
   }
@@ -129,9 +125,14 @@ describe.skip('Governance Upgrades Proposals', function () {
 
       expect(await this.erc20.version()).to.be.bignumber.equal(toBN(1));
 
+      // read-only provider
+      const provider = ethers.getDefaultProvider(network.config.url);
+      // get the ProxyAdmin of this contract
+      const proxyAdminAddress = '0x' + (await provider.getStorageAt(this.erc20.address, ADMIN_SLOT)).substring(26);
+
       // execute proposal => upgrades test ERC20 contract
       const tx2 = await this.governance.connect(this.anyone).executeProposal(`${proposalId}`);
-      await expectEvents(tx2, 'ExecuteTransaction', [ { target: this.proxyAdminAddress, value: toBN(0), signature: SIGNATURES.upgrade } ]);
+      await expectContractEvents(this.governance, 'ExecuteTransaction', tx2.blockNumber, tx2.blockNumber, [{target: proxyAdminAddress.toLowerCase(), value: toBN(0), signature: SIGNATURES.upgrade}]);
 
       this.testERC20ProxyInterface = new ethers.Contract(this.erc20.address, AdminUpgradeabilityProxyABI.abi, this.deployer);
       await expectContractEvents(this.testERC20ProxyInterface, 'Upgraded', tx2.blockNumber, tx2.blockNumber, [{implementation: this.erc20v2Logic.address.toLowerCase()}]);
