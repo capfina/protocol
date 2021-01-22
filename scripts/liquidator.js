@@ -73,7 +73,7 @@ function fetchEvents(fromBlock) {
         data.leverage /= UNIT;
         data.price /= UNIT;
         openPositions[data.positionId] = data;
-      } else if (name == 'PositonClosed') {
+      } else if (name == 'PositionClosed') {
         const diff = cachedPosition.margin - data.marginClosed / UNIT;
         if (diff > 0) {
           // If partial close, update margin
