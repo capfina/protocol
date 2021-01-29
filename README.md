@@ -22,7 +22,7 @@ Used to register and keep track of products available to trade. Maximum leverage
 
 ### Trading
 
-Receives orders from clients. These can be of three types: new position, add margin, or position close.
+Receives orders from clients. These can be of two types: new position or position close.
 
 ### Queue
 
